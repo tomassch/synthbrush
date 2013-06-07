@@ -1,4 +1,5 @@
 synthbrush
 ==========
 
-Alpha implementation of the synthbrush standard (convert a raster spectrogram to wav)
+synthbrush seeks to implement a standard for converting images to soundwaves (convert a raster spectrogram to wav).
+This is so far alpha-quality software.
