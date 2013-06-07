@@ -1,0 +1,11 @@
+Objective: The simplest set of rules to transform a spectrogram image into audible time domain, maximizing ease of edition and musical quality of the output. 
+
+
+Columns: time
+Lines: frequency
+Green color: doesnt affect sound
+Red color: right channel (following wire coloring standards) 
+Blue color: left channel (following wire coloring standards) 
+    Hence: Magenta makes sound in both channels.
+Black: -Inf dB
+Color end of scale (255): 0dB
