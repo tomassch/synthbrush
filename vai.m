@@ -1,92 +1,76 @@
+%TODO, recompile GraphicsMagick to get more bits per pixel in images
+% see http://wiki.octave.org/GraphicsMagick
+%AND THEN, rebuild octave (a.k.a major pain in the bum)
+
 clear all;
 close all;
 
-fs = 44100; %Hz
-octaveSpan = 2; %Octave
-freqRes = 10*12; %Freqs/Octave
-n = 2; %Number of minFreq periods to be shown in a frame
-fade = 1/25; %*100% of the matrix. How long is the fade-in/out between frames
-            %larger fade times are better, causing less frequency drift
-minFreq = 220; %Hz
-geratemplate = 'template1.png';
-inputImage = 'vai.png';
-templateLength = 5; %second
-templateBPM = 100; %beats per minute
-frameOverSample = 24; %Frames/ImageColumn
-volume = 0.8; % percent of full scale
+%--------- Local Parameters -------------------------
+inputImage = 'template1.png';
+%----------------------------------------------------
 
-overlap = fade/2;
-timespan = n*fs/minFreq; %samples/frame
-
-freqVector = minFreq*2.^transpose(fliplr([0:1/freqRes:octaveSpan])); %Hz
-freqVector = 2*pi*freqVector; %rad/s
+parameters; %set up the parameters (see parameters.m)
 
 %Read the input image
-%must be done before the template writting
 inIm = imread(inputImage);
 
-%Generate a template to make things easier later
-%In the future this must be in a different file!
-if ~strcmp(geratemplate,'') %if template name is not empty
-   %black image with green guides
-   im(:,:,1) = zeros(length(freqVector),50);%templateLength*timespan/frameOverSample);
-   im(:,:,2) = im(:,:,1);
-   im(:,:,3) = im(:,:,1);
-   %weak green line for each tone
-   im([1:freqRes/12:octaveSpan*freqRes],:,2) = 0.2;
-   %bold green line in every "A"   
-   im([1:freqRes:octaveSpan*freqRes],:,2) = 1;   
-   imwrite(im,geratemplate);
+%derive stuff from image
+octaveSpan = size(inIm,1)/freqRes;
+%limited to whole octave files
+%TODO flexibilize this:
+% boils down to rethink the freqVector generation
+if mod(octaveSpan,1)~=0
+   error('Image must have whole octaves');
 end
+
+duration = (size(inIm,2)-1)/imageColumnPerSecond; %seconds
+
+freqVector = minFreq ...
+             *2.^(transpose(fliplr([0:1/freqRes:octaveSpan]))); %Hz
+freqVector = 2*pi*freqVector; %rad/s
 
 %time line
-timeVector = [1/fs:1/fs:n/minFreq]; %s
-
-
-%fade line (trapezium)
-fadeVector = ones(size(timeVector));
-fadeSpan = round(fade*length(timeVector));
-ramp = [0:1/fadeSpan:1];
-%ramp up
-fadeVector(1,1:length(ramp))=ramp;
-%ramp down
-fadeVector(1,(end-length(ramp)+1):end)=fliplr(ramp);
-
-
-%rad matrix (rectangular matrix)
-freqMatrix = freqVector * timeVector; %rad
-%apply sin to get volts from rads
-freqMatrix = sin(freqMatrix); %"volts"
-%trapezoidal fading (very simple)
-fadeMatrix = ones(length(freqVector),1)*fadeVector;
-%apply fading
-freqMatrix = freqMatrix .* fadeMatrix;
-clear fadeMatrix;
-
-
-
-%process left channel (R)
-
-%allocate time buffer
-Rout = zeros(1,250*templateLength*fs);
-current=1;
-for i=[1:1:size(inIm,2)]
-   %this is the key line. Frequencies from the image are being
-   %multiplied by the volt samples in time 
-   timeSeg = double(transpose(inIm(:,i,1)))*freqMatrix;
-   if i==1
-    plot(timeSeg)
-   end
-   %trail all time segments together, overlaping the fade
-   for j=[1:1:frameOverSample]
-      Rout(1,current:current+length(timeSeg)-1) = ...
-         Rout(1,current:current+length(timeSeg)-1) + ...
-         timeSeg;
-      current = current+(length(timeSeg)*(1-fade));
-   end
+timeVector = [1/fs:1/fs:duration]; %seconds, really long vector
+Rout = zeros(size(timeVector));
+%upsampling factor
+upsamplingFactor = fs/imageColumnPerSecond; %Samples per ImageColumn
+%TODO flexibilize this, boils down to making a proper upsample algorithm
+%(i.e. one that can upsample by non integer factors)
+if mod(upsamplingFactor,1)~=0
+   error('Fs must be a multiple of image column per second');
 end
 
-%Normalize
-Rout = 0.8*Rout/max(max(Rout));
 
-wavwrite('output.wav',Rout',44100);
+%%lazy algorithm (a.k.a I skiped my DSP classes and forgot how to window an FFT)
+%%complexity O(n*m) n time; m freq
+%for each line of the image
+  % upsample the line from image time resolution to sound time resolution
+  %interpolate the upsampled line, thus getting an envelope
+  % multiply the envelope with the corresponding sinewave
+      %tip: randomize the inital phase of each frequency to avoid the dirac
+  % acumulate the result in the final audio vector
+%end for
+for m=[1:1:length(freqVector)-1]%WOP -1
+  imageLine = inIm(m,:,1);%WOP, only getting the right channel!!!
+  envelope = real(interp1(imageLine,[1:1/upsamplingFactor:length(imageLine)]));
+  envelope = envelope(2:end);
+  %make a sine vector the same size of the time vector
+  %at frequency m
+  %with a random initial phase (to spread the noise energy along time) 
+  sineVector = sin(2*pi*rand+ ... %random phase
+                   freqVector(m)*timeVector); %could be simplified but not critical
+  %the important line
+  Rout = Rout + (sineVector.*double(envelope));
+end
+
+%%Normalize
+mRout = max(max(Rout));
+if (mRout~=0) %avoid indian bread, thanks to andrekw
+    %TODO convert volume to dB
+    Rout = volume*Rout/max(max(Rout));
+else
+    disp('Image seems to contain no sound (max amplitude=0)');
+end
+
+%Save output to disk in audible format
+wavwrite(Rout',44100,'output.wav');
