@@ -51,7 +51,7 @@ end
   % acumulate the result in the final audio vector
 %end for
 for m=[1:1:length(freqVector)-1]%WOP -1
-  imageLine = inIm(m,:,1);%WOP, only getting the right channel!!!
+  imageLine = double(inIm(m,:,1));%WOP, only getting the right channel!!!
   envelope = real(interp1(imageLine,[1:1/upsamplingFactor:length(imageLine)]));
   envelope = envelope(2:end);
   %make a sine vector the same size of the time vector
@@ -60,7 +60,7 @@ for m=[1:1:length(freqVector)-1]%WOP -1
   sineVector = sin(2*pi*rand+ ... %random phase
                    freqVector(m)*timeVector); %could be simplified but not critical
   %the important line
-  Rout = Rout + (sineVector.*double(envelope));
+  Rout = Rout + (sineVector.*envelope);
 end
 
 %%Normalize
