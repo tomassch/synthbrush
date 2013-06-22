@@ -6,7 +6,7 @@ clear all;
 close all;
 
 %--------- Local Parameters -------------------------
-inputImage = 'template1.png';
+inputImage = 'template2.png';
 %----------------------------------------------------
 
 parameters; %set up the parameters (see parameters.m)
@@ -73,4 +73,4 @@ else
 end
 
 %Save output to disk in audible format
-wavwrite(Rout',44100,'output.wav');
+wavwrite(Rout',44100,'output2.wav');

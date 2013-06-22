@@ -1,14 +1,22 @@
 %in the future this should be made into a function to make variable scope local
 
 %----------- Local Parameters -------------------------
-geratemplate = 'template1.png';
+geratemplate = 'template2.png';
 
 templateLength = 10; %seconds
 
-templateBPM = 100; %beats per minute (vertical green bars, TODO)
+templateBPM = 100; %beats per minute
+rythmDiv = 4; %quaternary? ternary? 
+              %this is the numerator of the rhytm fraction 
+              %usually found at the beggining of music scores
 
-octaveSpan = 2; %octaves
+octaveSpan = 8; %octaves
 %------------------------------------------------------
+
+%------------- Template parameters --------------------
+weak = 0.2;
+bold = 1;
+%-----------------------------------------------------
 
 parameters; %set up the common parameters (fs and stuff, see parameters.m)
 
@@ -23,9 +31,13 @@ if ~strcmp(geratemplate,'') %if template name is not empty
    im(:,:,2) = im(:,:,1);
    im(:,:,3) = im(:,:,1);
    %weak green line for each tone
-   im([1:freqRes/12:octaveSpan*freqRes],:,2) = 0.2;
+   im([1:freqRes/12:octaveSpan*freqRes],:,2) = weak;
    %bold green line in every "A"   
-   im([1:freqRes:octaveSpan*freqRes],:,2) = 1;   
+   im([1:freqRes:octaveSpan*freqRes],:,2) = bold;   
+   %weak green line for every beat
+   im(:,[1:imageColumnPerSecond*60/templateBPM:end],2)=weak;
+   %bold green line for every beat
+   im(:,[1:rythmDiv*imageColumnPerSecond*60/templateBPM:end],2)=bold;
    imwrite(im,geratemplate);
    clear im;
 end
