@@ -3,14 +3,14 @@
 %----------- Local Parameters -------------------------
 geratemplate = 'template2.png';
 
-templateLength = 10; %seconds
+templateLength = 30; %seconds
 
-templateBPM = 100; %beats per minute
+templateBPM = 120; %beats per minute
 rythmDiv = 4; %quaternary? ternary? 
               %this is the numerator of the rhytm fraction 
               %usually found at the beggining of music scores
 
-octaveSpan = 8; %octaves
+octaveSpan = 9; %octaves
 %------------------------------------------------------
 
 %------------- Template parameters --------------------

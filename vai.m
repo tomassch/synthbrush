@@ -1,6 +1,10 @@
 %TODO, recompile GraphicsMagick to get more bits per pixel in images
 % see http://wiki.octave.org/GraphicsMagick
 %AND THEN, rebuild octave (a.k.a major pain in the bum)
+%TODO make the blue channel work.
+   %  Suggestion: make one function working for grayscale
+   %  And then call this SAME function once for each channel
+   % avoids repetition
 
 clear all;
 close all;
@@ -13,6 +17,18 @@ parameters; %set up the parameters (see parameters.m)
 
 %Read the input image
 inIm = imread(inputImage);
+
+%Crop zeroed striped from start and end
+%this allows comment area before and after,
+%without affecting the sound
+%sound only goes from first nonZero column until the
+%last non zero column
+sumImageR = sum(inIm(:,:,1));
+nonZero = find(sumImageR>0);
+inIm2(:,:,1) = inIm(:,nonZero(1):nonZero(end),1);
+inIm2(:,:,2) = inIm(:,nonZero(1):nonZero(end),2);
+inIm2(:,:,3) = inIm(:,nonZero(1):nonZero(end),3);
+inIm = inIm2; clear inIm2; %WOP
 
 %derive stuff from image
 octaveSpan = size(inIm,1)/freqRes;
