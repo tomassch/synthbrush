@@ -1,14 +1,14 @@
 %in the future this should be made into a function to make variable scope local
 
 %----------- Local Parameters -------------------------
-geratemplate = 'template2.png';
+geratemplate = 'toInkscape.png';
 
-templateLength = 30; %seconds
+templateLength = 10; %seconds
 
 templateBPM = 120; %beats per minute
 rythmDiv = 4; %quaternary? ternary? 
               %this is the numerator of the rhytm fraction 
-              %usually found at the beggining of music scores
+              %usually found at the begining of music scores
 
 octaveSpan = 9; %octaves
 %------------------------------------------------------

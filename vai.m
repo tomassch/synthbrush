@@ -10,7 +10,8 @@ clear all;
 close all;
 
 %--------- Local Parameters -------------------------
-inputImage = 'template2.png';
+inputImage = 'fromInkscape2.png';
+outputWav = 'fromInkscape2.wav';
 %----------------------------------------------------
 
 parameters; %set up the parameters (see parameters.m)
@@ -68,7 +69,13 @@ end
 %end for
 for m=[1:1:length(freqVector)-1]%WOP -1
   imageLine = double(inIm(m,:,1));%WOP, only getting the right channel!!!
-  envelope = real(interp1(imageLine,[1:1/upsamplingFactor:length(imageLine)]));
+  envelope = real(interp1(imageLine,[1:1/upsamplingFactor:length(imageLine)],'pchip'));
+  if(0) %yes, hate me, tomas fault!
+      if(sum(imageLine(:))>0) %WOPY debug, only gets lines with content
+        figure;
+        stem(envelope);
+      end
+  end
   envelope = envelope(2:end);
   %make a sine vector the same size of the time vector
   %at frequency m
@@ -89,4 +96,4 @@ else
 end
 
 %Save output to disk in audible format
-wavwrite(Rout',44100,'output2.wav');
+wavwrite(Rout',44100,outputWav);
