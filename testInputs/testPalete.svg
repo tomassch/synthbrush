@@ -15,7 +15,7 @@
    inkscape:version="0.48.3.1 r9886"
    width="500"
    height="960"
-   sodipodi:docname="toInkscape.png.2013_12_24_17_11_17.0.svg"
+   sodipodi:docname="testPalete.svg"
    inkscape:export-filename="/home/cartesius/synthbrush/fromInkscape2.png"
    inkscape:export-xdpi="90"
    inkscape:export-ydpi="90">
@@ -27,12 +27,24 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
   <defs
      id="defs3407">
+    <linearGradient
+       inkscape:collect="always"
+       id="linearGradient3776">
+      <stop
+         style="stop-color:#ff0000;stop-opacity:1;"
+         offset="0"
+         id="stop3778" />
+      <stop
+         style="stop-color:#ff0000;stop-opacity:0;"
+         offset="1"
+         id="stop3780" />
+    </linearGradient>
     <linearGradient
        inkscape:collect="always"
        id="linearGradient3805">
@@ -50,7 +62,7 @@
        xlink:href="#linearGradient3805"
        id="linearGradient5265"
        gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(0.95652173,0,0,5.2179486,0,-744.34616)"
+       gradientTransform="matrix(0.95652173,0,0,5.2179486,-585,-326.69232)"
        x1="7.318182"
        y1="222.37593"
        x2="62.727272"
@@ -100,7 +112,7 @@
        xlink:href="#linearGradient3805"
        id="linearGradient5308"
        gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(0.95652173,0,0,5.2179486,25,-744.34616)"
+       gradientTransform="matrix(0.95652173,0,0,5.2179486,-560,-326.69232)"
        x1="7.318182"
        y1="222.18428"
        x2="72.136368"
@@ -110,7 +122,7 @@
        xlink:href="#linearGradient3805"
        id="linearGradient5312"
        gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(0.95652173,0,0,5.2179486,50,-744.34616)"
+       gradientTransform="matrix(0.95652173,0,0,5.2179486,-535,-326.69232)"
        x1="5.227273"
        y1="222.95087"
        x2="51.227272"
@@ -120,11 +132,20 @@
        xlink:href="#linearGradient3805"
        id="linearGradient5316"
        gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(0.95652173,0,0,5.2179486,75,-794.34616)"
+       gradientTransform="matrix(0.95652173,0,0,5.2179486,-510,-376.69232)"
        x1="3.1363637"
        y1="224.67567"
        x2="43.909092"
        y2="225.05898" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient3776"
+       id="linearGradient3782"
+       x1="0"
+       y1="180.5"
+       x2="26"
+       y2="180.5"
+       gradientUnits="userSpaceOnUse" />
   </defs>
   <sodipodi:namedview
      pagecolor="#ffffff"
@@ -139,9 +160,9 @@
      inkscape:window-height="876"
      id="namedview3405"
      showgrid="true"
-     inkscape:zoom="4.2956737"
-     inkscape:cx="36.389218"
-     inkscape:cy="555.23354"
+     inkscape:zoom="1.0739184"
+     inkscape:cx="348.41589"
+     inkscape:cy="802.60893"
      inkscape:window-x="49"
      inkscape:window-y="24"
      inkscape:window-maximized="1"
@@ -174,7 +195,7 @@
      sodipodi:insensitive="true" />
   <path
      style="fill:url(#linearGradient5265);fill-opacity:1;stroke:none"
-     d="M 0,54 22,445.34616 0,461 z"
+     d="M -585,471.65384 -563,863 l -22,15.65384 z"
      id="path5260"
      inkscape:connector-curvature="0"
      sodipodi:nodetypes="cccc" />
@@ -220,11 +241,11 @@
      sodipodi:nodetypes="cccc"
      inkscape:connector-curvature="0"
      id="path5306"
-     d="M 25,53.999993 47,445.34616 25,461 z"
+     d="M -560,471.65383 -538,863 l -22,15.65384 z"
      style="fill:url(#linearGradient5308);fill-opacity:1;stroke:none" />
   <path
      style="fill:url(#linearGradient5312);fill-opacity:1;stroke:none"
-     d="M 50,54 72,445.34616 50,461 z"
+     d="M -535,471.65384 -513,863 l -22,15.65384 z"
      id="path5310"
      inkscape:connector-curvature="0"
      sodipodi:nodetypes="cccc" />
@@ -232,6 +253,13 @@
      sodipodi:nodetypes="cccc"
      inkscape:connector-curvature="0"
      id="path5314"
-     d="M 75,4 97,395.34616 75,411 z"
+     d="M -510,421.65384 -488,813 l -22,15.65384 z"
      style="fill:url(#linearGradient5316);fill-opacity:1;stroke:none" />
+  <rect
+     style="opacity:0.98999999000000005;color:#000000;fill:url(#linearGradient3782);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:16;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+     id="rect3006"
+     width="26"
+     height="361"
+     x="0"
+     y="0" />
 </svg>
