@@ -13,7 +13,7 @@ function[]=synthbrush(inputImage)
 %inputImage = 'fromInkscape2.png';
 outputWav = horzcat(inputImage,'.wav');
 %----------------------------------------------------
-
+logEnvelope = 1; %operates in dB
 
 
 parameters; %set up the parameters (see parameters.m)
@@ -70,14 +70,9 @@ end
   % acumulate the result in the final audio vector
 %end for
 for m=[1:1:length(freqVector)-1]%WOP -1
-  imageLine = double(inIm(m,:,1));%WOP, only getting the right channel!!!
-  envelope = real(interp1(imageLine,[1:1/upsamplingFactor:length(imageLine)],'pchip'));
-  if(0) %yes, hate me, tomas fault!
-      if(sum(imageLine(:))>0) %WOPY debug, only gets lines with content
-        figure;
-        stem(envelope);
-      end
-  end
+ imageLine = double(inIm(m,:,1));%WOP, only getting the right channel!!!
+ if(sum(imageLine(:))>0) %only process lines with content
+  envelope = real(interp1(imageLine,[1:1/upsamplingFactor:length(imageLine)]));
   envelope = envelope(2:end);
   %make a sine vector the same size of the time vector
   %at frequency m
@@ -85,7 +80,24 @@ for m=[1:1:length(freqVector)-1]%WOP -1
   sineVector = sin(2*pi*rand+ ... %random phase
                    freqVector(m)*timeVector); %could be simplified but not critical
   %the important line
+  if(logEnvelope)
+  %convert envelope to dB
+  % 255 = 0dBFS = |1| = |2^15| (full scale)
+  %   0 = -90dBFS  = 0 = 0  (no sound)
+    noiseBottom = 90; %dB
+    pixelTop = 255; %brightest pixel value
+    envelope = 10.^... %this undoes the Bel
+               ( ((envelope*...
+                  (noiseBottom/pixelTop) ...
+                 )-noiseBottom)/10 ... %this /10 undoes the deci in deciBel
+               );
+  end
+  if(1) %yes, hate me, tomas fault!
+        figure;
+        stem(envelope);
+  end
   Rout = Rout + (sineVector.*envelope);
+ end
 end
 
 %%Normalize
