@@ -6,13 +6,15 @@
    %  And then call this SAME function once for each channel
    % avoids repetition
 
-clear all;
-close all;
+
+function[]=synthbrush(inputImage)
 
 %--------- Local Parameters -------------------------
-inputImage = 'fromInkscape2.png';
-outputWav = 'fromInkscape2.wav';
+%inputImage = 'fromInkscape2.png';
+outputWav = horzcat(inputImage,'.wav');
 %----------------------------------------------------
+
+
 
 parameters; %set up the parameters (see parameters.m)
 
@@ -97,3 +99,6 @@ end
 
 %Save output to disk in audible format
 wavwrite(Rout',44100,outputWav);
+
+
+end
