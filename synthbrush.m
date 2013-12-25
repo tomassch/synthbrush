@@ -14,7 +14,7 @@ function[]=synthbrush(inputImage)
 outputWav = horzcat(inputImage,'.wav');
 %----------------------------------------------------
 logEnvelope = 1; %operates in dB
-
+verbose=0; %plots envelopes for all non-zero lines
 
 parameters; %set up the parameters (see parameters.m)
 
@@ -92,7 +92,7 @@ for m=[1:1:length(freqVector)-1]%WOP -1
                  )-noiseBottom)/10 ... %this /10 undoes the deci in deciBel
                );
   end
-  if(1) %yes, hate me, tomas fault!
+  if(verbose) %yes, hate me, tomas fault!
         figure;
         stem(envelope);
   end
