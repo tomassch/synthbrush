@@ -69,6 +69,7 @@ end
       %tip: randomize the inital phase of each frequency to avoid the dirac
   % acumulate the result in the final audio vector
 %end for
+windowSize = ceil(upsamplingFactor/10); 
 for m=[1:1:length(freqVector)-1]%WOP -1
  imageLine = double(inIm(m,:,1));%WOP, only getting the right channel!!!
  if(sum(imageLine(:))>0) %only process lines with content
@@ -76,7 +77,19 @@ for m=[1:1:length(freqVector)-1]%WOP -1
   envelope = envelope(2:end);
   %make a sine vector the same size of the time vector
   %at frequency m
-  %with a random initial phase (to spread the noise energy along time) 
+  %with a random initial phase (to spread the noise energy along time)
+  seedVector = timeVector(1:(upsamplingFactor+windowSize));
+  %seed = small time segment equivalent to one image column.
+  % we generate sines seeds, which are segments of sines, equivalente to one image column
+  % to avoid changes in timbre due to slow beatings we are "reseting" all sine phases for each image column
+  % to avoid the sudden change in phase, we are making a linear window, that will fade out the older seed and fade in the new.
+  %1)The sine seed is seed long + 1*window. 
+  %2)Ramp fade in and fade out are applied, the size of one window each, in the start and end.
+  %3)The fade in is overlaped with the fade out, added together.
+  %4)The seed is concatenated many times, as many as there are columns in the image.
+  sineSeed =   sin(2*pi*rand+ ... %random phase
+                   freqVector(m)*seedVector); %could be simplified but not critical
+  fadeOut = [1:-(1/windowSize):0]; fadeOut = fadeOut(2:end);
   sineVector = sin(2*pi*rand+ ... %random phase
                    freqVector(m)*timeVector); %could be simplified but not critical
   %the important line
